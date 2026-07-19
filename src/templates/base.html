@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}DevOps-Rx{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="{{ url_for('landing') }}" class="nav-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="9" height="9" rx="2" fill="#6366f1"/>
+          <rect x="13" y="2" width="9" height="9" rx="2" fill="#6366f1" opacity="0.5"/>
+          <rect x="2" y="13" width="9" height="9" rx="2" fill="#6366f1" opacity="0.5"/>
+          <rect x="13" y="13" width="9" height="9" rx="2" fill="#6366f1"/>
+        </svg>
+        DevOps-Rx
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('landing') }}" class="nav-link">Home</a>
+        <a href="{{ url_for('pricing') }}" class="nav-link">Pricing</a>
+        {% if user %}
+          <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+          <a href="{{ url_for('analyze') }}" class="nav-link">Analyze</a>
+          {% if user.is_admin %}
+            <a href="{{ url_for('admin_users') }}" class="nav-link">Users</a>
+          {% endif %}
+          <a href="{{ url_for('logout') }}" class="nav-link">Sign out</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="nav-link">Sign in</a>
+          <a href="{{ url_for('signup') }}" class="btn btn-primary btn-sm">Get started</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ message }}
+          <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+      {% endfor %}
+    {% endwith %}
+  </div>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2024 DevOps-Rx</span>
+      <div class="footer-links">
+        <a href="{{ url_for('pricing') }}">Pricing</a>
+        <a href="{{ url_for('signup') }}">Sign up</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

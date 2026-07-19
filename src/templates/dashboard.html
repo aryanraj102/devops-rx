@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — DevOps-Rx{% endblock %}
+{% block content %}
+
+<div class="page-inner">
+  <div class="page-header">
+    <div>
+      <h1>Welcome back, {{ user.first_name }}.</h1>
+      <p class="page-sub">{{ user.email }}</p>
+    </div>
+    <div class="plan-badge plan-{{ user.plan }}">{{ user.plan | upper }}</div>
+  </div>
+
+  {% if user.plan == 'free' %}
+  <div class="upgrade-banner">
+    <div class="upgrade-banner-text">
+      <strong>You're on the Free plan.</strong>
+      Free analysis shows 2 issues per log. Upgrade to Pro to see all issues, create Jira tickets, and send Slack alerts.
+    </div>
+    <a href="{{ url_for('pricing') }}" class="btn btn-primary btn-sm">Upgrade to Pro — ${{ price }}</a>
+  </div>
+  {% endif %}
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Logs analyzed</div>
+      <div class="stat-value">{{ user.get('logs_analyzed', 0) }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Plan</div>
+      <div class="stat-value">{{ user.plan | capitalize }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Member since</div>
+      <div class="stat-value">{{ user.joined_at[:10] if user.joined_at else '—' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Last sign-in</div>
+      <div class="stat-value">{{ user.last_login[:10] if user.last_login else 'Today' }}</div>
+    </div>
+  </div>
+
+  <div class="action-grid">
+    <a href="{{ url_for('analyze') }}" class="action-card">
+      <div class="action-icon">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#6366f1" stroke-width="2" stroke-linecap="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+      </div>
+      <div class="action-text">
+        <strong>Analyze a log</strong>
+        <span>Upload or paste a log file to start analysis</span>
+      </div>
+      <svg class="action-arrow" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 18l6-6-6-6"/></svg>
+    </a>
+
+    {% if user.plan == 'free' %}
+    <a href="{{ url_for('pricing') }}" class="action-card action-card-pro">
+      <div class="action-icon">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#6366f1" stroke-width="2" stroke-linecap="round" d="M5 3l14 9-14 9V3z"/></svg>
+      </div>
+      <div class="action-text">
+        <strong>Upgrade to Pro</strong>
+        <span>Unlimited issues, Jira & Slack — ${{ price }} one-time</span>
+      </div>
+      <svg class="action-arrow" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 18l6-6-6-6"/></svg>
+    </a>
+    {% endif %}
+
+    {% if user.is_admin %}
+    <a href="{{ url_for('admin_users') }}" class="action-card">
+      <div class="action-icon">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#6366f1" stroke-width="2" stroke-linecap="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <div class="action-text">
+        <strong>Manage users</strong>
+        <span>View all registered accounts</span>
+      </div>
+      <svg class="action-arrow" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 18l6-6-6-6"/></svg>
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Analyze log — DevOps-Rx{% endblock %}
+{% block content %}
+
+<div class="page-inner">
+  <div class="page-header">
+    <div>
+      <h1>Analyze a log</h1>
+      <p class="page-sub">Upload a file or paste log text below.</p>
+    </div>
+    <div class="plan-badge plan-{{ user.plan }}">{{ user.plan | upper }}</div>
+  </div>
+
+  <div class="analyze-grid">
+    <div class="analyze-form-col">
+      <form method="POST" action="{{ url_for('analyze') }}" enctype="multipart/form-data" id="analyze-form">
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="log_file" name="log_file" accept=".log,.txt" class="drop-input" />
+          <div class="drop-body" id="drop-body">
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24"><path stroke="#6b7280" stroke-width="1.5" stroke-linecap="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            <p><strong>Drop a log file here</strong><br/><span>or <label for="log_file" class="file-label">browse</label> — .log, .txt</span></p>
+          </div>
+          <div id="file-chosen" class="file-chosen" style="display:none"></div>
+        </div>
+
+        <div class="or-divider">or paste log text</div>
+
+        <div class="form-group">
+          <textarea name="log_text" id="log_text" rows="10" placeholder="Paste log lines here…" class="log-textarea">{{ log_text }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="analyze-btn">
+          <span id="btn-label">Run analysis</span>
+          <span id="btn-spinner" class="spinner" style="display:none"></span>
+        </button>
+      </form>
+
+      <div class="sample-logs">
+        <p class="sample-logs-label">Try a sample log:</p>
+        <div class="sample-log-btns">
+          <button class="btn btn-ghost btn-sm" onclick="loadSample('linux')">Linux system</button>
+          <button class="btn btn-ghost btn-sm" onclick="loadSample('apache')">Apache access</button>
+          <button class="btn btn-ghost btn-sm" onclick="loadSample('kubernetes')">Kubernetes</button>
+        </div>
+      </div>
+    </div>
+
+    {% if result %}
+    <div class="result-col">
+      {% if result.error %}
+        <div class="result-error">
+          <strong>Analysis failed:</strong> {{ result.error }}
+        </div>
+      {% else %}
+        <div class="result-section">
+          <div class="result-header">
+            <h2>
+              {{ result.total_issues }} issue{{ 's' if result.total_issues != 1 else '' }} found
+              {% if result.plan_truncated %}
+                <span class="truncated-note">(showing 2 of {{ result.total_issues }})</span>
+              {% endif %}
+              {% if result.log_truncated %}
+                <span class="truncated-note log-warn">(log was trimmed — only first 8k chars analyzed)</span>
+              {% endif %}
+            </h2>
+          </div>
+
+          {% if result.issues %}
+            <div class="issues-list">
+              {% for issue in result.issues %}
+              <div class="issue-card sev-{{ issue.severity }}">
+                <div class="issue-header">
+                  <span class="sev-badge sev-{{ issue.severity }}">{{ issue.severity }}</span>
+                  <span class="issue-service">{{ issue.service }}</span>
+                  <span class="issue-category">{{ issue.category }}</span>
+                </div>
+                <p class="issue-summary">{{ issue.summary }}</p>
+                {% if issue.evidence %}
+                <div class="evidence">
+                  {% for line in issue.evidence[:2] %}
+                  <code class="evidence-line">{{ line }}</code>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="no-issues">No issues detected in this log.</div>
+          {% endif %}
+
+          {% if result.plan_truncated %}
+          <div class="upgrade-gate">
+            <div class="gate-blur">
+              <div class="gate-placeholder"></div>
+              <div class="gate-placeholder"></div>
+            </div>
+            <div class="gate-cta">
+              <strong>{{ result.total_issues - 2 }} more issue{{ 's' if result.total_issues - 2 != 1 else '' }} hidden</strong>
+              <p>Upgrade to Pro to see all results, remediation steps, and file Jira tickets.</p>
+              <a href="{{ url_for('pricing') }}" class="btn btn-primary">Upgrade to Pro — ${{ price }}</a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        {% if result.remediations %}
+        <div class="result-section">
+          <h2>Remediation steps</h2>
+          <div class="remediations-list">
+            {% for rem in result.remediations %}
+            <div class="rem-card">
+              <div class="rem-title">{{ rem.issue_summary }}</div>
+              <div class="rem-row"><span class="rem-label">Root cause</span><span>{{ rem.root_cause }}</span></div>
+              <div class="rem-row"><span class="rem-label">Fix</span><span class="rem-fix">{{ rem.fix }}</span></div>
+              <div class="rem-row"><span class="rem-label">Why</span><span class="rem-muted">{{ rem.rationale }}</span></div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% if result.checklist_html %}
+        <div class="result-section">
+          <h2>Runbook checklist</h2>
+          <div class="checklist-content">{{ result.checklist_html | safe }}</div>
+        </div>
+        {% endif %}
+
+        <div class="result-section integrations-row">
+          <div class="integration-status {% if result.jira_keys %}status-ok{% else %}status-off{% endif %}">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+            Jira: {% if result.jira_keys %}{{ result.jira_keys | join(', ') }}{% else %}Not configured{% endif %}
+          </div>
+          <div class="integration-status {% if result.slack_status == 'ok' %}status-ok{% else %}status-off{% endif %}">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
+            Slack: {% if result.slack_status == 'ok' %}Sent{% elif result.slack_status == 'skipped' %}Not configured{% else %}{{ result.slack_status }}{% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+function loadSample(type) {
+  var samples = {
+    linux: `Jan 15 03:42:11 prod-srv01 kernel: [1234567.890] Out of memory: Kill process 8821 (java) score 892 or sacrifice child
+Jan 15 03:42:11 prod-srv01 kernel: [1234567.891] Killed process 8821 (java) total-vm:8388608kB, anon-rss:7340032kB
+Jan 15 03:44:23 prod-srv01 kernel: EXT4-fs error (device sda1): ext4_find_entry: No space left on device
+Jan 15 04:01:55 prod-srv01 sshd[9012]: Failed password for root from 192.168.1.105 port 22 ssh2
+Jan 15 04:01:57 prod-srv01 sshd[9013]: Failed password for root from 192.168.1.105 port 22 ssh2
+Jan 15 04:01:59 prod-srv01 sshd[9014]: Failed password for root from 192.168.1.105 port 22 ssh2
+Jan 15 04:15:33 prod-srv01 nginx[10234]: signal process started
+Jan 15 05:22:10 prod-srv01 kernel: CPU load average: 18.45 18.12 17.98`,
+    apache: `192.168.1.1 - - [15/Jan/2024:10:00:01 +0000] "GET /index.html HTTP/1.1" 200 2048
+10.0.0.5 - - [15/Jan/2024:10:00:15 +0000] "POST /api/data HTTP/1.1" 500 512
+10.0.0.5 - - [15/Jan/2024:10:00:16 +0000] "POST /api/data HTTP/1.1" 500 512
+192.168.1.100 - - [15/Jan/2024:10:01:00 +0000] "GET /admin HTTP/1.1" 403 256
+192.168.1.100 - - [15/Jan/2024:10:01:05 +0000] "GET /admin/config HTTP/1.1" 404 128
+192.168.1.100 - - [15/Jan/2024:10:01:10 +0000] "GET /admin/users HTTP/1.1" 404 128
+172.16.0.50 - - [15/Jan/2024:10:02:30 +0000] "GET /heavy-query HTTP/1.1" 200 10240 "6234192"`,
+    kubernetes: `2024-01-15T08:00:01Z WARNING OOMKilled pod/api-server-5d8f9b-xkp2q in namespace production
+2024-01-15T08:00:05Z ERROR Failed to pull image "myrepo/app:latest": ImagePullBackOff
+2024-01-15T08:01:10Z WARNING Liveness probe failed for container api in pod api-server-5d8f9b-xkp2q
+2024-01-15T08:01:10Z WARNING Liveness probe failed for container api in pod api-server-5d8f9b-xkp2q
+2024-01-15T08:02:00Z WARNING Node prod-node-1 has condition MemoryPressure=True`
+  };
+  document.getElementById('log_text').value = samples[type] || '';
+}
+</script>
+
+{% endblock %}

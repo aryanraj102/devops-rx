@@ -1,0 +1,37 @@
+2024-01-15T07:00:01.123Z INFO  kube-scheduler Binding pod api-server-5d8f9b-xkp2q to node prod-node-1
+2024-01-15T07:00:05.234Z INFO  kubelet Successfully pulled image "myrepo/api-server:v2.3.1"
+2024-01-15T07:00:10.445Z INFO  kubelet Started container api in pod api-server-5d8f9b-xkp2q
+2024-01-15T07:15:22.001Z INFO  kubelet Memory usage: 1.8Gi / 2.0Gi limit for pod api-server-5d8f9b-xkp2q
+2024-01-15T07:28:33.112Z WARN  kubelet Memory usage: 1.95Gi / 2.0Gi limit for pod api-server-5d8f9b-xkp2q — approaching limit
+2024-01-15T07:44:01.889Z WARN  kubelet Container api in pod api-server-5d8f9b-xkp2q exceeded memory limit
+2024-01-15T07:44:02.001Z ERROR kubelet OOMKilled: container api in pod/api-server-5d8f9b-xkp2q namespace/production — exit code 137
+2024-01-15T07:44:02.112Z WARN  kubelet Pod api-server-5d8f9b-xkp2q restarting (restart count: 1)
+2024-01-15T07:44:05.333Z INFO  kubelet Pulling image "myrepo/api-server:v2.3.1" for restart
+2024-01-15T07:44:12.001Z INFO  kubelet Started container api in pod api-server-5d8f9b-xkp2q (restart 1)
+2024-01-15T07:55:44.221Z INFO  kube-controller-manager Scaling deployment worker-deployment to 3 replicas
+2024-01-15T07:55:50.001Z INFO  kubelet Pulling image "myrepo/worker:latest"
+2024-01-15T07:55:55.334Z ERROR kubelet Failed to pull image "myrepo/worker:latest": rpc error: code = Unknown desc = failed to pull and unpack image: failed to resolve reference "myrepo/worker:latest": unexpected status code 401 Unauthorized
+2024-01-15T07:55:55.335Z WARN  kubelet Error: ImagePullBackOff — pod worker-deployment-7f8d9-abc12 namespace/production
+2024-01-15T07:56:25.001Z WARN  kubelet Backoff pulling image "myrepo/worker:latest" for pod worker-deployment-7f8d9-abc12
+2024-01-15T07:56:55.001Z ERROR kubelet ImagePullBackOff: pod worker-deployment-7f8d9-abc12, container worker — retrying in 5m0s
+2024-01-15T08:00:01.001Z WARN  kubelet Liveness probe failed for container api in pod api-server-5d8f9b-xkp2q: HTTP probe failed with statuscode: 503
+2024-01-15T08:00:01.002Z WARN  kubelet Container api failed liveness probe, will not be restarted — probe count: 1/3
+2024-01-15T08:00:31.001Z WARN  kubelet Liveness probe failed for container api in pod api-server-5d8f9b-xkp2q: HTTP probe failed with statuscode: 503
+2024-01-15T08:00:31.002Z WARN  kubelet Container api failed liveness probe — probe count: 2/3
+2024-01-15T08:01:01.001Z WARN  kubelet Liveness probe failed for container api in pod api-server-5d8f9b-xkp2q: HTTP probe failed with statuscode: 503
+2024-01-15T08:01:01.002Z ERROR kubelet Liveness probe failed 3 times — restarting container api in pod api-server-5d8f9b-xkp2q
+2024-01-15T08:01:02.445Z INFO  kubelet Stopping container api
+2024-01-15T08:01:04.001Z INFO  kubelet Started container api in pod api-server-5d8f9b-xkp2q (restart 2)
+2024-01-15T08:02:00.001Z INFO  kube-proxy Updated iptables rules for service api-service
+2024-01-15T08:10:15.334Z WARN  kubelet Node prod-node-1 has condition: MemoryPressure=True — available: 512Mi, threshold: 768Mi
+2024-01-15T08:10:15.335Z WARN  kube-scheduler Node prod-node-1 tainted with node.kubernetes.io/memory-pressure — new pods will not be scheduled here
+2024-01-15T08:10:20.001Z WARN  kube-controller-manager 2 pods pending due to node pressure on prod-node-1
+2024-01-15T08:15:33.001Z ERROR kubelet OOMKilled: container api in pod/api-server-5d8f9b-xkp2q namespace/production — exit code 137 (restart 2)
+2024-01-15T08:15:33.112Z WARN  kubelet Pod api-server-5d8f9b-xkp2q restarting (restart count: 3)
+2024-01-15T08:20:00.001Z WARN  kubelet ImagePullBackOff persists for pod worker-deployment-7f8d9-abc12 — manual intervention required
+2024-01-15T08:25:01.001Z INFO  kubelet Pulling image "myrepo/api-server:v2.3.1" for restart 3
+2024-01-15T08:25:08.112Z INFO  kubelet Started container api in pod api-server-5d8f9b-xkp2q (restart 3)
+2024-01-15T08:30:15.001Z WARN  kubelet Node prod-node-1 MemoryPressure=True — evicting best-effort pods
+2024-01-15T08:30:16.223Z WARN  kube-controller-manager Evicted pod cache-worker-abc99 from prod-node-1 due to memory pressure
+2024-01-15T08:35:00.001Z INFO  kube-scheduler Attempting to reschedule 2 pending pods to prod-node-2
+2024-01-15T08:35:05.112Z INFO  kube-scheduler Pod worker-deployment-7f8d9-xyz34 scheduled to prod-node-2

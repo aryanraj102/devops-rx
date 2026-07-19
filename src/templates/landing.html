@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}DevOps-Rx — AI-powered DevOps incident analyzer{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Multi-agent incident analysis</div>
+    <h1 class="hero-title">Log analysis that actually tells you what's wrong.</h1>
+    <p class="hero-sub">Upload your ops logs. Get a diagnosis, a fix list, and a Jira ticket — in under 60 seconds.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('signup') }}" class="btn btn-primary btn-lg">Get started free</a>
+      <a href="#features" class="btn btn-ghost btn-lg">See how it works</a>
+    </div>
+    <div class="hero-note">No credit card needed &nbsp;·&nbsp; Free plan available</div>
+  </div>
+  <div class="hero-preview">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="terminal-title">linux_system.log</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-dim">Jan 15 03:42:11</span> kernel: <span class="t-red">Out of memory: Kill process 8821</span></div>
+        <div class="t-line"><span class="t-dim">Jan 15 03:44:23</span> kernel: <span class="t-red">EXT4-fs error: No space left</span></div>
+        <div class="t-line"><span class="t-dim">Jan 15 04:01:55</span> sshd: <span class="t-orange">Failed password for root</span></div>
+        <div class="t-line t-muted">· · ·</div>
+        <div class="t-line"><span class="t-green">✓ 4 issues found &nbsp; 4 fixes ready &nbsp; 1 Jira ticket filed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-inner">
+    <h2 class="section-title">Three agents. One pipeline.</h2>
+    <p class="section-sub">Each agent does one job well. Together they take a raw log from upload to resolution.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="#6366f1" stroke-width="2" stroke-linecap="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <h3>Reads your logs</h3>
+        <p>The classifier agent parses any log format — Linux, Apache, Kubernetes, Nginx — and extracts distinct issues with the exact log lines as evidence.</p>
+        <div class="feature-tag">Classifier agent</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="#6366f1" stroke-width="2" stroke-linecap="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3>Tells you what to do</h3>
+        <p>The remediation agent maps each issue to a root cause and a concrete fix. The cookbook agent formats everything into a numbered runbook you can hand to on-call.</p>
+        <div class="feature-tag">Remediation + Cookbook</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path stroke="#6366f1" stroke-width="2" stroke-linecap="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        </div>
+        <h3>Files the tickets</h3>
+        <p>Critical issues go straight to Jira. A formatted summary hits your Slack channel. Your team knows what happened before they open the log.</p>
+        <div class="feature-tag">Jira + Slack (Pro)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="video-section" id="demo">
+  <div class="section-inner">
+    <div class="video-section-header">
+      <h2 class="section-title">See it in action</h2>
+      <p class="section-sub">From raw log to diagnosis, fix list, and Jira ticket — in under 60 seconds.</p>
+    </div>
+    <div class="demo-gif-wrap">
+      <img src="{{ url_for('static', filename='opssight_walkthrough.gif') }}"
+           alt="DevOps-Rx walkthrough — log upload to incident report"
+           class="demo-gif" />
+    </div>
+  </div>
+</section>
+
+<section class="pricing-preview">
+  <div class="section-inner pricing-preview-inner">
+    <div class="pricing-preview-text">
+      <h2>Free to start. One payment for everything else.</h2>
+      <p>The free plan covers 2 issues per analysis. Pro unlocks unlimited results, Jira integration, Slack notifications, and all future features for a one-time ${{ price }}.</p>
+      <a href="{{ url_for('pricing') }}" class="btn btn-primary">See pricing</a>
+    </div>
+    <div class="pricing-preview-cards">
+      <div class="mini-card">
+        <div class="mini-card-name">Free</div>
+        <div class="mini-card-price">$0</div>
+        <ul class="mini-card-list">
+          <li>2 issues per analysis</li>
+          <li>All log formats</li>
+          <li>Remediation steps</li>
+        </ul>
+      </div>
+      <div class="mini-card mini-card-pro">
+        <div class="mini-card-badge">Popular</div>
+        <div class="mini-card-name">Pro</div>
+        <div class="mini-card-price">${{ price }} <span>one-time</span></div>
+        <ul class="mini-card-list">
+          <li>Unlimited issues</li>
+          <li>Jira ticket creation</li>
+          <li>Slack notifications</li>
+          <li>All future features</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Pricing — DevOps-Rx{% endblock %}
+{% block content %}
+
+<div class="page-inner pricing-page">
+  <div class="pricing-header">
+    <h1>Simple pricing. No subscriptions.</h1>
+    <p>Start free. Pay once for everything else.</p>
+  </div>
+
+  <div class="pricing-cards">
+    <div class="pricing-card">
+      <div class="pricing-card-name">Free</div>
+      <div class="pricing-card-price">$0</div>
+      <div class="pricing-card-desc">Good for evaluating DevOps-Rx on your first few incidents.</div>
+      <ul class="pricing-list">
+        <li class="yes">2 issues per analysis</li>
+        <li class="yes">All log formats (Linux, Apache, K8s, Nginx)</li>
+        <li class="yes">Remediation steps</li>
+        <li class="yes">Runbook checklist</li>
+        <li class="no">Jira ticket creation</li>
+        <li class="no">Slack notifications</li>
+        <li class="no">Unlimited issue results</li>
+        <li class="no">Future features</li>
+      </ul>
+      {% if user and user.plan == 'free' %}
+        <div class="btn btn-outline btn-full" style="text-align:center;cursor:default">Current plan</div>
+      {% elif not user %}
+        <a href="{{ url_for('signup') }}" class="btn btn-outline btn-full">Get started free</a>
+      {% endif %}
+    </div>
+
+    <div class="pricing-card pricing-card-featured">
+      <div class="pricing-card-popular">Best value</div>
+      <div class="pricing-card-name">Pro</div>
+      <div class="pricing-card-price">${{ price }} <span class="price-period">one-time</span></div>
+      <div class="pricing-card-desc">Full access, forever. No renewals, no surprises.</div>
+      <ul class="pricing-list">
+        <li class="yes">Unlimited issues per analysis</li>
+        <li class="yes">All log formats</li>
+        <li class="yes">Remediation steps</li>
+        <li class="yes">Runbook checklist</li>
+        <li class="yes">Jira ticket creation</li>
+        <li class="yes">Slack notifications</li>
+        <li class="yes">All future features</li>
+        <li class="yes">Priority support</li>
+      </ul>
+      {% if user and user.plan == 'pro' %}
+        <div class="btn btn-primary btn-full" style="text-align:center;cursor:default;opacity:.7">You're on Pro</div>
+      {% else %}
+        <a href="{{ payment_link }}" target="_blank" class="btn btn-primary btn-full" id="pay-btn">Get Pro — ${{ price }}</a>
+        {% if user %}
+        <p class="after-payment-note">
+          After payment, <a href="{{ url_for('payment_success') }}">click here to activate Pro</a>.
+          <br/><small>(Demo: <a href="{{ url_for('payment_simulate') }}">simulate payment</a>)</small>
+        </p>
+        {% else %}
+        <p class="after-payment-note"><a href="{{ url_for('signup') }}">Create an account</a> first, then purchase.</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Frequently asked</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <strong>Is Pro really one-time?</strong>
+        <p>Yes. Pay ${{ price }} once and your account has Pro access permanently, including features we add later.</p>
+      </div>
+      <div class="faq-item">
+        <strong>What log formats work?</strong>
+        <p>Any plain-text log. The classifier handles Linux syslog, Apache/Nginx access logs, Kubernetes event logs, Docker logs, and most structured formats.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Do I need to set up Jira and Slack?</strong>
+        <p>Only if you want those integrations. Analysis and checklist generation work without them. Add credentials in your .env file when you're ready.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Which LLM does DevOps-Rx use?</strong>
+        <p>DeepSeek V3 via OpenRouter. Fast, accurate on technical logs, and cost-efficient for large files.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

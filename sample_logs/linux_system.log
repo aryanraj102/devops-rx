@@ -1,0 +1,54 @@
+Jan 15 01:00:01 prod-srv01 CRON[7823]: (root) CMD (run-parts /etc/cron.hourly)
+Jan 15 01:17:32 prod-srv01 kernel: [1234100.012] eth0: renamed from veth8a3c2f1
+Jan 15 01:23:44 prod-srv01 systemd[1]: Starting Cleanup of Temporary Directories...
+Jan 15 01:23:44 prod-srv01 systemd[1]: tmp.mount: Succeeded.
+Jan 15 01:45:10 prod-srv01 ntpd[1234]: ntp_adjtime() returns code 5 (ERROR)
+Jan 15 01:45:10 prod-srv01 ntpd[1234]: time_const: 8 offset: 127us freq: 32.001ppm uncertainty: 0.003
+Jan 15 01:45:10 prod-srv01 ntpd[1234]: clock is 127ms ahead, drift exceeding threshold
+Jan 15 02:01:05 prod-srv01 kernel: [1234558.880] swap: 78% used (3.1G/4.0G), performance may degrade
+Jan 15 02:01:05 prod-srv01 kernel: [1234558.881] swapd: page scan rate increasing
+Jan 15 02:15:33 prod-srv01 systemd[1]: logrotate.service: Main process exited, code=exited, status=1/FAILURE
+Jan 15 02:15:33 prod-srv01 systemd[1]: logrotate.service: Failed with result 'exit-code'.
+Jan 15 02:15:33 prod-srv01 CRON[8192]: (root) CMDOUT (/usr/sbin/logrotate /etc/logrotate.conf: error opening /var/log/app.log: No such file or directory)
+Jan 15 02:30:01 prod-srv01 CRON[8221]: (root) CMD (/usr/local/bin/backup.sh)
+Jan 15 02:30:05 prod-srv01 kernel: [1234872.100] EXT4-fs warning (device sda1): ext4_da_update_reserve_space: inum 98345, block 0, used 0; dev has no reserve
+Jan 15 02:30:09 prod-srv01 kernel: [1234876.221] EXT4-fs error (device sda1): ext4_find_entry: No space left on device — /var filesystem 100% full
+Jan 15 02:30:09 prod-srv01 kernel: [1234876.223] EXT4-fs error (device sda1): ext4_write_inode: couldn't write inode 45678: I/O error
+Jan 15 02:30:11 prod-srv01 CRON[8221]: (root) CMDOUT (/usr/local/bin/backup.sh: line 14: /var/backups/db_backup.tar.gz: No space left on device)
+Jan 15 02:30:12 prod-srv01 kernel: [1234879.001] VFS: file-max limit 1048576 reached
+Jan 15 02:45:01 prod-srv01 kernel: [1234951.302] CPU load average: 14.23 13.89 12.44 — threshold 10.0 exceeded
+Jan 15 02:45:01 prod-srv01 kernel: [1234951.303] process count: 1247 (high watermark: 1000)
+Jan 15 02:45:11 prod-srv01 sshd[8801]: Accepted publickey for deploy from 10.0.1.5 port 52311 ssh2
+Jan 15 03:01:02 prod-srv01 sshd[8901]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.105
+Jan 15 03:01:03 prod-srv01 sshd[8901]: Failed password for root from 192.168.1.105 port 44231 ssh2
+Jan 15 03:01:05 prod-srv01 sshd[8902]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.168.1.105
+Jan 15 03:01:05 prod-srv01 sshd[8902]: Failed password for root from 192.168.1.105 port 44234 ssh2
+Jan 15 03:01:07 prod-srv01 sshd[8903]: Failed password for root from 192.168.1.105 port 44237 ssh2
+Jan 15 03:01:09 prod-srv01 sshd[8904]: Failed password for root from 192.168.1.105 port 44239 ssh2
+Jan 15 03:01:11 prod-srv01 sshd[8905]: Failed password for root from 192.168.1.105 port 44241 ssh2
+Jan 15 03:01:13 prod-srv01 sshd[8906]: Failed password for admin from 192.168.1.105 port 44243 ssh2
+Jan 15 03:01:14 prod-srv01 sshd[8907]: Failed password for ubuntu from 192.168.1.105 port 44245 ssh2
+Jan 15 03:15:22 prod-srv01 kernel: [1235410.881] CPU: 0 PID: 8821 Comm: java Tainted: G OE 5.15.0-91-generic
+Jan 15 03:15:22 prod-srv01 kernel: [1235410.882] Memory: 8182688K/8388608K available (7984K kernel code)
+Jan 15 03:40:01 prod-srv01 kernel: [1235800.443] oom_reaper: reaped process 8745 (node), now anon-rss:0kB, file-rss:0kB
+Jan 15 03:42:11 prod-srv01 kernel: [1235930.221] Out of memory: Kill process 8821 (java) score 892 or sacrifice child
+Jan 15 03:42:11 prod-srv01 kernel: [1235930.222] Killed process 8821 (java) total-vm:8388608kB, anon-rss:7340032kB, file-rss:131072kB, shmem-rss:0kB
+Jan 15 03:42:11 prod-srv01 kernel: [1235930.223] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/system.slice/java.service,task=java,pid=8821,uid=1001
+Jan 15 03:42:15 prod-srv01 systemd[1]: java.service: Main process exited, code=killed, status=9/KILL
+Jan 15 03:42:15 prod-srv01 systemd[1]: java.service: Failed with result 'signal'.
+Jan 15 03:42:16 prod-srv01 systemd[1]: java.service: Scheduled restart job, restart counter is at 1.
+Jan 15 03:44:23 prod-srv01 kernel: [1236072.001] EXT4-fs error (device sda1): ext4_find_entry: No space left on device
+Jan 15 04:01:52 prod-srv01 nginx[10120]: nginx: [emerg] listen() to 0.0.0.0:80 failed (98: Address already in use)
+Jan 15 04:01:55 prod-srv01 nginx[10122]: nginx: [alert] worker process 9987 exited on signal 11 (core dumped)
+Jan 15 04:01:55 prod-srv01 systemd[1]: nginx.service: Main process exited, code=killed, status=11/SEGV
+Jan 15 04:01:55 prod-srv01 systemd[1]: nginx.service: Failed with result 'signal'.
+Jan 15 04:01:58 prod-srv01 nginx[10234]: nginx: master process /usr/sbin/nginx
+Jan 15 04:01:58 prod-srv01 systemd[1]: nginx.service: Scheduled restart job, restart counter is at 3.
+Jan 15 04:02:00 prod-srv01 systemd[1]: Started A high performance web server and a reverse proxy server.
+Jan 15 04:15:00 prod-srv01 kernel: [1237100.991] CPU load average: 18.45 18.12 17.98 — sustained high load
+Jan 15 04:30:01 prod-srv01 CRON[10891]: (root) CMD (run-parts /etc/cron.daily)
+Jan 15 05:00:01 prod-srv01 ntpd[1234]: ntp_adjtime() returns code 5 (ERROR), offset: 248us — clock drift worsening
+Jan 15 05:00:01 prod-srv01 ntpd[1234]: adjusting local clock by -0.000248s
+Jan 15 05:30:11 prod-srv01 kernel: [1239800.221] swap: 91% used (3.65G/4.0G) — paging heavy
+Jan 15 05:45:00 prod-srv01 sshd[11000]: Accepted publickey for deploy from 10.0.1.5 port 52340 ssh2
+Jan 15 06:00:01 prod-srv01 CRON[11100]: (root) CMD (run-parts /etc/cron.hourly)
