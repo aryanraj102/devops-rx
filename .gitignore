@@ -11,3 +11,8 @@ dist/
 build/
 *.egg-info/
 .pytest_cache/
+# Local credentials — never commit
+TEST_ACCOUNTS.md
+TEST_ACCOUNTS.txt
+*_credentials.*
+*_secrets.*

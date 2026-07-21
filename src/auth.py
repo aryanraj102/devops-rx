@@ -250,11 +250,15 @@ def login_user_oauth(email: str, first_name: str, last_name: str,
 
 
 def seed_admin_users():
-    admins = [
-        {"first_name": "Admin", "last_name": "User", "email": "admin@devopsuite.com", "password": "Admin@2024!"},
-        {"first_name": "Rajesh", "last_name": "Khanna", "email": "rajesh@devopsuite.com", "password": "Dev@2024!"},
-        {"first_name": "Test", "last_name": "Free", "email": "testuser@devopsuite.com", "password": "Test@2024"},
-    ]
+    import os
+    seed_json = os.environ.get("SEED_USERS", "")
+    if not seed_json:
+        return
+    try:
+        import json
+        admins = json.loads(seed_json)
+    except Exception:
+        return
     for a in admins:
         if not get_user(a["email"]):
             register_user(a["first_name"], a["last_name"], a["email"], a["password"])

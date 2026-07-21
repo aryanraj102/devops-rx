@@ -106,13 +106,7 @@ gunicorn wsgi:app --bind 127.0.0.1:5001
 
 ## Test Accounts
 
-| Role | Email | Password | Plan |
-|------|-------|----------|------|
-| Admin | `admin@devopsuite.com` | `Admin@2024!` | Pro |
-| Developer | `rajesh@devopsuite.com` | `Dev@2024!` | Pro |
-| Free user | `testuser@devopsuite.com` | `Test@2024` | Free |
-
-Admin accounts are seeded automatically on first run with Pro access.
+Test account credentials are kept in a local file (`TEST_ACCOUNTS.md`) that is not committed to this repository. Seed users are configured via the `SEED_USERS` environment variable — see `.env.example` for the format.
 
 ---
 
